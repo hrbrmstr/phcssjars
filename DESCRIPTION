@@ -1,0 +1,24 @@
+Package: phcssjars
+Type: Package
+Title: Java Archive Wrapper Supporting the 'phcss' Package
+Version: 6.2.0
+Date: 2019-08-17
+Authors@R: c(
+    person("Bob", "Rudis", role = c("aut", "cre"), email = "bob@rud.is")
+  )
+Maintainer: Bob Rudis <bob@rud.is>
+SystemRequirements: Java
+Description: Contains all supporting JARs for working with the 'ph-css' Java library
+    (<https://github.com/phax/ph-css>). Version number matches version number of included
+    'ph-css' library.
+URL: https://gitlab.com/hrbrmstr/phcssjars
+BugReports: https://gitlab.com/hrbrmstr/phcssjars/issues
+License: Apache License 2.0 | file LICENSE
+Encoding: UTF-8
+Suggests:
+    testthat,
+    covr
+Depends:
+    R (>= 3.2.0),
+    rJava
+RoxygenNote: 6.1.1

@@ -1,0 +1,87 @@
+---
+output: 
+  rmarkdown::github_document:
+    df_print: kable
+---
+```{r pkg-knitr-opts, include=FALSE}
+hrbrpkghelpr::global_opts()
+```
+
+```{r badges, results='asis', echo=FALSE, cache=FALSE}
+hrbrpkghelpr::stinking_badges()
+```
+
+```{r description, results='asis', echo=FALSE, cache=FALSE}
+hrbrpkghelpr::yank_title_and_description()
+```
+
+## Installation
+
+```{r install-ex, results='asis', echo=FALSE, cache=FALSE}
+hrbrpkghelpr::install_block()
+```
+
+## Usage
+
+```{r}
+library(rJava)
+library(phcssjars)
+
+packageVersion("phcssjars")
+```
+
+Turn a CSS file into a data frame (some bits TBD):
+
+```{r ex1}
+library(tidyverse)
+
+ECSSVersion <- J("com.helger.css.ECSSVersion")
+CSSReader <- J("com.helger.css.reader.CSSReader")
+
+css_fil <- paste0(readLines("https://www.r-project.org/css/R.css"), collapse="\n")
+
+css <- CSSReader$readFromString(css_fil, ECSSVersion$CSS30)
+
+lapply(css$getAllRules(), function(.x) {
+  
+  if (.jinherits(.x, "com.helger.css.decl.CSSStyleRule")) {
+  
+    tibble(
+      selectors = sapply(.x$getAllSelectors(), function(.y) .y$getAsCSSString()),
+      declarations = list(lapply(.x$getAllDeclarations(), function(.y) {
+        property <- .y$getProperty()
+        try(
+          sapply(.y$getExpression()$getAllSimpleMembers(), function(.z) .z$getOptimizedValue()), 
+          silent = TRUE
+        ) -> expressions
+        if (inherits(expressions, "try-error")) expressions <- NA_character_
+        tibble(
+          property = property,
+          value = expressions
+        )
+      }))
+    )
+    
+  } else if (.jinherits(.x, "com.helger.css.decl.CSSFontFaceRule")) {
+    message("Font Face Rules TBD")
+  } else if (.jinherits(.x, "com.helger.css.decl.CSSMediaRule")) {
+    message("Media Rules TBD")
+  } else if (.jinherits(.x, "com.helger.css.decl.CSSKeyframesRule")) {
+    message("Keyframes Rules TBD")
+  } else if (.jinherits(.x, "com.helger.css.decl.CSSViewportRule")) {
+    message("Viewport Rules TBD")
+  }  
+  
+}) %>% 
+  bind_rows() %>% 
+  unnest() %>% 
+  unnest() -> res
+
+res
+```
+
+## `phcssjars` Metrics
+
+```{r cloc, echo=FALSE}
+cloc::cloc_pkg_md()
+```
