@@ -25,7 +25,15 @@ number of included ‘ph-css’ library.
 ## Installation
 
 ``` r
+remotes::install_git("https://git.rud.is/hrbrmstr/phcssjars.git")
+# or
+remotes::install_git("https://git.sr.ht/~hrbrmstr/phcssjars")
+# or
 remotes::install_gitlab("hrbrmstr/phcssjars")
+# or
+remotes::install_bitbucket("hrbrmstr/phcssjars")
+# or
+remotes::install_github("hrbrmstr/phcssjars")
 ```
 
 NOTE: To use the ‘remotes’ install options you will need to have the
